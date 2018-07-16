@@ -1,3 +1,3 @@
-# packet-metadata-helper
+# packetmd 👩‍⚕️
 
-Helper functionality for using Packet metadata
+Helper functionality for using Packet metadata and api

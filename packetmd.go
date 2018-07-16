@@ -1,4 +1,4 @@
-package packetmetadatahelper
+package packetmd
 
 import (
 	"regexp"
@@ -44,4 +44,24 @@ func GetKVPairs(device *packngo.Device, delimiter string) ([]*KV, error) {
 	}
 
 	return pairs, nil
+}
+
+// AddTag adds a tag to a packet device
+func AddTag(client *packngo.Client, deviceID, tag string) error {
+	device, _, err := client.Devices.Get(deviceID)
+	if err != nil {
+		return err
+	}
+	tags := append(device.Tags, tag)
+	client.Devices.Update(deviceID, &packngo.DeviceUpdateRequest{
+		Tags: &tags,
+	})
+
+	return nil
+}
+
+// RemoveTag removes a tag from a packet device
+func RemoveTag(device *packngo.Device, tag string) error {
+
+	return nil
 }
