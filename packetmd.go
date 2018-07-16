@@ -61,7 +61,38 @@ func AddTag(client *packngo.Client, deviceID, tag string) error {
 }
 
 // RemoveTag removes a tag from a packet device
-func RemoveTag(device *packngo.Device, tag string) error {
+func RemoveTag(client *packngo.Client, deviceID, tag string) error {
+	device, _, err := client.Devices.Get(deviceID)
+	if err != nil {
+		return err
+	}
+	tags := make([]string, 0)
+	for _, t := range device.Tags {
+		if t != tag {
+			tags = append(tags, t)
+		}
+	}
+	client.Devices.Update(deviceID, &packngo.DeviceUpdateRequest{
+		Tags: &tags,
+	})
+	return nil
+}
 
+// UpdateTag updates an existing tag on a packet device. If it can't find the tag, nothing happens
+func UpdateTag(client *packngo.Client, deviceID, tag, newTag string) error {
+	device, _, err := client.Devices.Get(deviceID)
+	if err != nil {
+		return err
+	}
+	tags := make([]string, 0)
+	for _, t := range device.Tags {
+		if t == tag {
+			t = newTag
+		}
+		tags = append(tags, t)
+	}
+	client.Devices.Update(deviceID, &packngo.DeviceUpdateRequest{
+		Tags: &tags,
+	})
 	return nil
 }
