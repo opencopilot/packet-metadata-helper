@@ -46,6 +46,21 @@ func GetKVPairs(device *packngo.Device, delimiter string) ([]*KV, error) {
 	return pairs, nil
 }
 
+// GetKVsByKey searches all the KV pairs on a device and filters based on a key
+func GetKVsByKey(device *packngo.Device, key, delimiter string) ([]*KV, error) {
+	kvs, err := GetKVPairs(device, delimiter)
+	if err != nil {
+		return nil, err
+	}
+	foundKvs := make([]*KV, 0)
+	for _, kv := range kvs {
+		if kv.Key == key {
+			foundKvs = append(foundKvs, kv)
+		}
+	}
+	return foundKvs, nil
+}
+
 // AddTag adds a tag to a packet device
 func AddTag(client *packngo.Client, deviceID, tag string) error {
 	device, _, err := client.Devices.Get(deviceID)
