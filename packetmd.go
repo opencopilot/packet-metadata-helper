@@ -14,8 +14,7 @@ type KV struct {
 }
 
 // GetKVPairs will parse a device's tags looking for tags of the form `key=value` where the delimiter (=) can be set to an arbitrary string
-func GetKVPairs(device *packngo.Device, delimiter string) ([]*KV, error) {
-	tags := device.Tags
+func GetKVPairs(tags []string, delimiter string) ([]*KV, error) {
 	pairs := make([]*KV, 0)
 
 	if delimiter == "" {
@@ -47,8 +46,8 @@ func GetKVPairs(device *packngo.Device, delimiter string) ([]*KV, error) {
 }
 
 // GetKVsByKey searches all the KV pairs on a device and filters based on a key
-func GetKVsByKey(device *packngo.Device, key, delimiter string) ([]*KV, error) {
-	kvs, err := GetKVPairs(device, delimiter)
+func GetKVsByKey(tags []string, key, delimiter string) ([]*KV, error) {
+	kvs, err := GetKVPairs(tags, delimiter)
 	if err != nil {
 		return nil, err
 	}
